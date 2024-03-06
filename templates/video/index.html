@@ -1,0 +1,72 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% load thumbnail %}
+{% load video_tag %}
+
+{% block content %}
+<div style="margin-top: 3%;height: 140px"><img src="{% static 'img/banner.jpg' %}"></div>
+<div class="ui container" id="v-content">
+<div class="ui grid">
+<div style="width: 550px; height: 293Px; margin-right: 27px;margin-top: 13px" >
+<div class="layui-carousel " id="test1" style="border-radius: 5px;box-shadow: 0px 1px 10px 0px #D4D4D5, 0px 0px 0px 1px #D4D4D5;">
+        <div carousel-item style="border-radius: 5px">
+    {% for item in recommend_list %}
+{% thumbnail item.cover "550x293" crop="center" as im %}
+            <a href="{% url 'video:detail' item.pk %}"><img src="{{ im.url }}" style="border-radius: 5px" /></a>
+        {% empty %}
+        {% endthumbnail %}
+            {% endfor %}
+        </div>
+    </div>
+    </div>
+    {% for item in video_list %}
+    <div class="four wide column">
+        <div class="ui card">
+            <a class="image" href="{% url 'video:detail' item.pk %}">
+                {% thumbnail item.cover "300x200" crop="center" as im %}
+                <img class="ui image" src="{{ im.url }}">
+                {% empty %}
+                {% endthumbnail %}
+                <i class="large play icon v-play-icon"></i>
+            </a>
+            <div class="content" >
+                <a class="header" href="{% url 'video:detail' item.pk %}">{{ item.title }}</a>
+                <div class="meta">
+                    <span class="date">发布于{{ item.create_time|time_since}}</span>
+                </div>
+                <div class="description">
+                    {{ item.view_count}}次观看
+                </div>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <h3>暂无数据</h3>
+    {% endfor %}
+</div>
+
+{% include "base/page_nav.html" %}
+
+{% endblock content %}
+{% block javascript %}
+    </div>
+<script>
+
+    layui.use('carousel', function () {
+        var carousel = layui.carousel;
+        //建造实例
+        carousel.render({
+            elem: '#test1'
+            , width: '550px' //设置容器宽度
+            , height: '293px' //设置容器高度
+            , autoplay: true
+
+            // , full:'true' //是否全屏轮播,默认false
+            // , arrow: 'always' //始终显示箭头和点击按钮
+            // ,anim: 'updown' //切换动画方式，可从各个方向滚动
+
+        });
+    });
+
+</script>
+{% endblock javascript %}

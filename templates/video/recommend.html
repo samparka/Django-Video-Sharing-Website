@@ -1,0 +1,27 @@
+{% load thumbnail %}
+
+<span class="video-side-title">推荐视频</span>
+<div class="ui unstackable divided items">
+
+    {% for item in recommend_list %}
+    <div class="item">
+        <div class="ui tiny image" >
+            {% thumbnail item.cover "300x200" crop="center" as im %}
+                <a href="{% url 'video:detail' item.pk %}" >
+            <img class="ui image" src="{{ im.url }}" style="border-radius: 7px">
+                </a>
+            {% empty %}
+            {% endthumbnail %}
+        </div>
+        <div class="middle aligned content">
+            <a style="font-size: 15px; color: #0f0f10; font-weight: bold" href="{% url 'video:detail' item.pk %}">{{ item.title }}</a>
+            <div class="meta">
+                <span class="description">{{ item.view_count }}次观看</span>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <h3>暂无推荐</h3>
+    {% endfor %}
+
+</div>
